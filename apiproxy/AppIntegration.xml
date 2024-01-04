@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<APIProxy revision="5" name="AppIntegration">
+    <Basepaths>/aimq/v1/consumer</Basepaths>
+    <ConfigurationVersion majorVersion="4" minorVersion="0"/>
+    <CreatedAt>1694469653033</CreatedAt>
+    <CreatedBy>lalevee@google.com</CreatedBy>
+    <Description></Description>
+    <DisplayName>AppIntegration</DisplayName>
+    <LastModifiedAt>1704377099338</LastModifiedAt>
+    <LastModifiedBy>lalevee@google.com</LastModifiedBy>
+    <ManifestVersion>SHA-512:e2874c3705a20d04808b436c6665114ddbb2e7a074b65455a5daae26ffdfda55fa72fd737359e6572d52661f979442ec06ad30659945ae272c79bfc0da214907:eu-west-1</ManifestVersion>
+    <Policies>
+        <Policy>AM-setIntegrationVariables</Policy>
+        <Policy>AM-setProductID</Policy>
+        <Policy>AM.GCPScopes</Policy>
+        <Policy>EV-getProductID</Policy>
+        <Policy>FCgcpAuthent</Policy>
+        <Policy>JS-formatResponse</Policy>
+        <Policy>KV.Lookup-SA-Key</Policy>
+    </Policies>
+    <ProxyEndpoints>
+        <ProxyEndpoint>default</ProxyEndpoint>
+    </ProxyEndpoints>
+    <Resources>
+        <Resource>jsc://formatResponse.js</Resource>
+    </Resources>
+    <Spec></Spec>
+    <TargetServers/>
+    <TargetEndpoints>
+        <TargetEndpoint>default</TargetEndpoint>
+    </TargetEndpoints>
+</APIProxy>

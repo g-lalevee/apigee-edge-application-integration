@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<ExtractVariables continueOnError="false" enabled="true" name="EV-getProductID">
+    <DisplayName>EV-getProductID</DisplayName>
+    <Properties/>
+    <Source>request</Source>
+    <URIPath name="productID">
+        <Pattern ignoreCase="true">**/{productID}</Pattern>
+    </URIPath>
+    <VariablePrefix/>
+    <IgnoreUnresolvedVariables>false</IgnoreUnresolvedVariables>
+</ExtractVariables>

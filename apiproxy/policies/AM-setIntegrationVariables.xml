@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<AssignMessage continueOnError="false" enabled="true" name="AM-setIntegrationVariables">
+    <DisplayName>AM-setIntegrationVariables</DisplayName>
+    <Properties/>
+    <AssignVariable>
+        <Name>target.copy.pathsuffix</Name>
+        <Value>false</Value>
+    </AssignVariable>
+    <AssignVariable>
+        <Name>ProjectId</Name>
+        <Value>xxxxx</Value>
+    </AssignVariable>
+    <AssignVariable>
+        <Name>IntegrationName</Name>
+        <Value>xxxxx</Value>
+    </AssignVariable>
+    <AssignVariable>
+        <Name>ApiTrigger</Name>
+        <Value>api_trigger/xxxxx</Value>
+    </AssignVariable>
+    <AssignVariable>
+        <Name>Region</Name>
+        <Value>xxxxx</Value>
+    </AssignVariable>
+    <AssignVariable>
+        <Name>parameters_keys_values_string</Name>
+        <Template>{"productID":{"string_value":"{productID}"}}</Template>
+        <!-- JSON sample = <Template>{"InputJson":{"json_value":"{\"Field1\":\"Value1\",\"Fielsd2\":\"Value2\"}"}}</Template> -->
+    </AssignVariable>
+    <Set>
+        <Headers>
+            <Header name="Authorization">Bearer {private.gcp.access_token}</Header>
+            <Header name="Accept">application/json</Header>
+            <Header name="Content-Type">application/json</Header>
+        </Headers>
+        <Verb>POST</Verb>
+        <Path/>
+        <Payload contentType="application/json">
+                 {"trigger_id":"{ApiTrigger}","input_parameters":{parameters_keys_values_string}}
+        </Payload>
+    </Set>
+    <AssignVariable>
+        <Name>target.url</Name>
+        <Template>https://{Region}-integrations.googleapis.com/v1/projects/{ProjectId}/locations/{Region}/products/apigee/integrations/{IntegrationName}:execute</Template>
+    </AssignVariable>
+</AssignMessage>
