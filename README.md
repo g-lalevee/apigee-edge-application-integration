@@ -28,7 +28,7 @@ The flow principle is:
 ## Requirement
 
 - A Google Cloud Platform account 
-- A Google Cloud Application Integration  
+- A Google Cloud Application Integration Service 
 - An Apigee Edge organization 
 
 
@@ -50,7 +50,7 @@ The flow principle is:
 
 4. Install Apigee GCP SA Shareflow<BR>This sharedflow is used to obtain access tokens for Google Cloud service accounts. Access tokens are cached in a dedicated environment cache resource for 10min, and used to call GCP services.<BR>Source: [Github Apigee Devrel SA Auth Sharedflow](https://github.com/apigee/devrel/tree/main/references/gcp-sa-auth-shared-flow).
 
-    Exemple: straight deployment to Apigee Edge using [Sackmesser](https://github.com/apigee/devrel/tree/main/tools/apigee-sackmesser). 
+    Exemple: straight deployment to Apigee Edge using [Sackmesser](https://github.com/apigee/devrel/tree/main/tools/apigee-sackmesser), directly from Git repository. 
 
 
     ```bash
@@ -63,27 +63,29 @@ The flow principle is:
     -g https://github.com/apigee/devrel/tree/main/references/gcp-sa-auth-shared-flow
     ```
 
+    > you can also use Apigee Edge UI, [Apigee Edge Deploy Maven Plugin](https://github.com/apigee/apigee-deploy-maven-plugin/tree/1.x) or [apigeetool](https://github.com/apigee/apigeetool-node),  to deploy the proxy.
+
+
 5. Deploy this proxy to your Apigee organization
 
-    Exemple: straight deployment to Apigee Edge using [Sackmesser](https://github.com/apigee/devrel/tree/main/tools/apigee-sackmesser).
+    Exemple: straight deployment to Apigee Edge using [Sackmesser](https://github.com/apigee/devrel/tree/main/tools/apigee-sackmesser), directly from Git repository.
 
-    ```
+    ``` bash
     export APIGEE_EDGE_USR=<YOUR-USER-NAME>
     export APIGEE_EDGE_PWD=<YOUR-USER-PASSWORD>
     export APIGEE_EDGE_ORG=<YOUR-ORG-NAME>
     export APIGEE_EDGE_ENV=<YOUR-ENV-NAME>
 
     sackmesser deploy --apigeeapi -u $APIGEE_EDGE_USR -p $APIGEE_EDGE_PWD \
-    -o $APIGEE_EDGE_ORG -e $APIGEE_EDGE_ENV  
+    -o $APIGEE_EDGE_ORG -e $APIGEE_EDGE_ENV \
+    -g -g https://github.com/g-lalevee/apigee-edge-application-integration
     ```
 > you can also use Apigee Edge UI, [Apigee Edge Deploy Maven Plugin](https://github.com/apigee/apigee-deploy-maven-plugin/tree/1.x) or [apigeetool](https://github.com/apigee/apigeetool-node),  to deploy the proxy.
 
 
 ## Configuration]
-1. Configure this proxy
-    
-
-    1. Update AM-setIntegrationVariables policy.<BR>Set **gcp.projectid** and **gcp.topicid** value with your GCP Project ID and PubSub topic:
+1. Configure this proxy<BR>
+   Update AM-setIntegrationVariables policy.<BR>Set **ProjectId**, **IntegrationName**, **ApiTrigger**, **Region** and **parameters_keys_values_string** values with your GCP Project and Application Integration values:
 
         ``` xml
         <AssignVariable>
