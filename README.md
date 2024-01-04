@@ -63,7 +63,7 @@ The flow principle is:
     -g https://github.com/apigee/devrel/tree/main/references/gcp-sa-auth-shared-flow
     ```
 
-    > you can also use Apigee Edge UI, [Apigee Edge Deploy Maven Plugin](https://github.com/apigee/apigee-deploy-maven-plugin/tree/1.x) or [apigeetool](https://github.com/apigee/apigeetool-node),  to deploy the proxy.
+    > you can also use Apigee Edge UI, [Apigee Edge Deploy Maven Plugin](https://github.com/apigee/apigee-deploy-maven-plugin/tree/1.x) or [apigeetool](https://github.com/apigee/apigeetool-node),  to deploy the sharedflow.
 
 
 5. Deploy this proxy to your Apigee organization
@@ -78,7 +78,7 @@ The flow principle is:
 
     sackmesser deploy --apigeeapi -u $APIGEE_EDGE_USR -p $APIGEE_EDGE_PWD \
     -o $APIGEE_EDGE_ORG -e $APIGEE_EDGE_ENV \
-    -g -g https://github.com/g-lalevee/apigee-edge-application-integration
+    -g https://github.com/g-lalevee/apigee-edge-application-integration
     ```
 > you can also use Apigee Edge UI, [Apigee Edge Deploy Maven Plugin](https://github.com/apigee/apigee-deploy-maven-plugin/tree/1.x) or [apigeetool](https://github.com/apigee/apigeetool-node),  to deploy the proxy.
 
@@ -87,7 +87,7 @@ The flow principle is:
 1. Configure this proxy<BR>
    Update AM-setIntegrationVariables policy.<BR>Set **ProjectId**, **IntegrationName**, **ApiTrigger**, **Region** and **parameters_keys_values_string** values with your GCP Project and Application Integration values:
 
-        ``` xml
+    ```xml
         <AssignVariable>
             <Name>ProjectId</Name>
             <Value>xxxxx</Value>
@@ -108,7 +108,7 @@ The flow principle is:
             <Name>parameters_keys_values_string</Name>
             <Template>{"productID":{"string_value":"{productID}"}}</Template>
         </AssignVariable>
-        ```
+    ```
 
 2. Save and deploy proxy
 
