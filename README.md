@@ -215,7 +215,7 @@ curl -i -X GET  'https://<YOUR-HOSTNAME>/v1/appint' | jq
 
 
 ``` bash
-curl -i -X GET  'https://<YOUR-HOSTNAME>/v1/appint/<YOUR-PRODUCT-ID>' | jq
+curl -i -X GET  'https://<YOUR-HOSTNAME>/v1/appint/1YMWWN1N4O' | jq
 ```
 
 
