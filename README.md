@@ -55,8 +55,8 @@ The flow principle is:
         ```
     and copy the result to your clipboard.
     - update `./resources/edge/<YOUR-ENV-NAME>/kvms.json` with
-        - **name**= your new KVM name
-        - **entry.name**= your new KVM entry name
+        - **name**= your new KVM name (default value: **appint-sa**)
+        - **entry.name**= your new KVM entry name (default value: **gcp-sa-key**)
         - **entry.value**= SA json key file content converted to string
     - rename folder `./resources/edge/<YOUR-ENV-NAME>` to your Apigee target environment name
     

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<KeyValueMapOperations name="KV.Lookup-SA-Key" mapIdentifier="gcp-sa-devrel-2023">
+<KeyValueMapOperations name="KV.Lookup-SA-Key" mapIdentifier="appint-sa">
     <ExpiryTimeInSecs>300</ExpiryTimeInSecs>
     <Get assignTo="private.gcp.service_account.key">
         <Key>
-            <Parameter>access-integration</Parameter>
+            <Parameter>my-sa-key</Parameter>
         </Key>
     </Get>
 </KeyValueMapOperations>
