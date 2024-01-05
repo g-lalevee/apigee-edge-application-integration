@@ -22,8 +22,9 @@ The flow principle is:
 6. Call the GCP Application Integration [projects.locations.integrations.execute API](https://cloud.google.com/application-integration/docs/reference/rest/v1/projects.locations.integrations/execute)
 7. Extract Data from returned payload (Policy JS-formatResponse)
 
-
+<BR>
 ![Proxy Overview](/images/trace.png)
+<BR>
 
 ## Requirement
 
@@ -38,9 +39,11 @@ The flow principle is:
 
 1. If needed, set up a Google Cloud Application Integration Service and create an Integration Flow, having an API trigger. See [Set up Application Integration](https://cloud.google.com/application-integration/docs/setup-application-integration).
 
-> The Apigee proxy provided was designed to call this Application Integration Flow, having one input string parameter : **productID**
+> The Apigee proxy provided was designed to call this Application Integration Flow, having one input string parameter : **productID**. The flow allows to query a BigQuery table to retrieve products list or one produc details.
 
+<BR>
 ![applicationIntegrationFlow](/images/applicationIntegrationFlow.png)
+<BR>
 
 2. Create GCP Service Accounts<BR>To authorize Apigee Edge to use Google Cloud Application Integration, you must first: 
     - Create a service account in Google Cloud and assign it the necessary roles to execute your Application Integration flow: depending on the resource type, **integrations.apigeeIntegrations.invoke** or **integrations.integrations.invoke** (see [Applicaton Integration execute: IAM permissions](https://cloud.google.com/application-integration/docs/reference/rest/v1/projects.locations.integrations/execute#iam-permissions) and [Understanding GCP roles](https://cloud.google.com/iam/docs/understanding-roles)).
