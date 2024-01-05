@@ -181,7 +181,7 @@ The flow principle is:
 You can now test your proxy.
 
 ``` bash
-curl -i -X GET  'https://<YOUR-HOSTNAME>/v1/appint'
+curl -i -X GET  'https://<YOUR-HOSTNAME>/v1/appint' | jq
 ```
 
 ``` json
@@ -194,7 +194,14 @@ curl -i -X GET  'https://<YOUR-HOSTNAME>/v1/appint'
     "priceUsd": 65.5,
     "categories": "music"
   },
-  ...
+  {
+    "id": "1YMWWN1N4O",
+    "name": "Home Barista Kit",
+    "description": "Always wanted to brew coffee with Chemex and Aeropress at home?",
+    "picture": "/img/products/barista-kit.jpg",
+    "priceUsd": 123.99,
+    "categories": "cookware"
+  },
   {
     "id": "2ZYFJ3GM2N",
     "name": "Film Camera",
@@ -208,7 +215,7 @@ curl -i -X GET  'https://<YOUR-HOSTNAME>/v1/appint'
 
 
 ``` bash
-curl -i -X GET  'https://<YOUR-HOSTNAME>/v1/appint/<YOUR-PRODUCT-ID>'
+curl -i -X GET  'https://<YOUR-HOSTNAME>/v1/appint/<YOUR-PRODUCT-ID>' | jq
 ```
 
 
