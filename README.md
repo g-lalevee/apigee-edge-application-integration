@@ -23,7 +23,9 @@ The flow principle is:
 7. Extract Data from returned payload (Policy JS-formatResponse)
 
 <BR>
+
 ![Proxy Overview](/images/trace.png)
+
 <BR>
 
 ## Requirement
@@ -42,7 +44,9 @@ The flow principle is:
 > The Apigee proxy provided was designed to call this Application Integration Flow, having one input string parameter : **productID**. The flow allows to query a BigQuery table to retrieve products list or one produc details.
 
 <BR>
+
 ![applicationIntegrationFlow](/images/applicationIntegrationFlow.png)
+
 <BR>
 
 2. Create GCP Service Accounts<BR>To authorize Apigee Edge to use Google Cloud Application Integration, you must first: 
