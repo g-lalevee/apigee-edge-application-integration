@@ -49,7 +49,7 @@ The flow principle is:
 3. Create a KVM in the target Apigee Environment. <BR>Add an **encrypted** KVM entry in it. Paste the JSON content of the Service Account JSON key file, downloaded in step 2.
 
     Example: straight deployment to Apigee Edge using [Sackmesser](https://github.com/apigee/devrel/tree/main/tools/apigee-sackmesser), from local repository. 
-    - convert SA json key file data to string<BR>For example, you can use the following commmand:
+    - convert SA json key file data to string<BR>You can use the following commmand:
         ```bash
         cat <YOUR-SA-JSON-KEY-FILE> | jq -c | jq -R
         ```
