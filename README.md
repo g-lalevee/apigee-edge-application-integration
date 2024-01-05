@@ -41,7 +41,7 @@ The flow principle is:
 
 1. If needed, set up a Google Cloud Application Integration Service and create an Integration Flow, having an API trigger. See [Set up Application Integration](https://cloud.google.com/application-integration/docs/setup-application-integration).
 
-> The Apigee proxy provided was designed to call this Application Integration Flow, having one input string parameter : **productID**. The flow allows to query a BigQuery table to retrieve products list or one produc details.
+> The Apigee proxy provided was designed to call this Application Integration Flow, having one input string parameter : **productID**. The flow allows to query a BigQuery table to retrieve products list or one product details.
 
 <BR>
 
@@ -52,6 +52,27 @@ The flow principle is:
 2. Create GCP Service Accounts<BR>To authorize Apigee Edge to use Google Cloud Application Integration, you must first: 
     - Create a service account in Google Cloud and assign it the necessary roles to execute your Application Integration flow: depending on the resource type, **integrations.apigeeIntegrations.invoke** or **integrations.integrations.invoke** (see [Applicaton Integration execute: IAM permissions](https://cloud.google.com/application-integration/docs/reference/rest/v1/projects.locations.integrations/execute#iam-permissions) and [Understanding GCP roles](https://cloud.google.com/iam/docs/understanding-roles)).
     - Create a key and download the json key file for the service account
+
+    To create Service Account in your GCP project, you can use following gcloud commands (or GCP Web UI):
+
+    ```sh
+    export SA_NAME=<your-new-service-account-name>
+
+    gcloud iam service-accounts create $SA_NAME --display-name="Apigee Edge Service Account"
+
+    export PROJECT_ID=$(gcloud config get-value project)
+    export APPINT_SA=$SA_NAME@$PROJECT_ID.iam.gserviceaccount.com
+
+    gcloud projects add-iam-policy-binding "$PROJECT_ID" \
+    --member="serviceAccount:$APPINT_SA" \
+    --role="roles/integrations.integrationInvoker"
+
+    gcloud iam service-accounts keys create $SA_NAME-key.json --iam-account=$APPINT_SA --key-file-type=json 
+
+    ```
+
+    Copy `<your-new-service-account-name>-key.json` file content to clipboard. 
+
 
 3. Create a KVM in the target Apigee Environment. <BR>Add an **encrypted** KVM entry in it. Paste the JSON content of the Service Account JSON key file, downloaded in step 2.
 
