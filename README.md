@@ -34,8 +34,9 @@ The flow principle is:
 
 ## Installation
 
+0. (option) Install Apigee Sackmesser<BR>The Apigee Sackmesser lets you deploy API proxies, shared flows and configuration to Apigee Edge (as well as Apigee hybrid/X) without writing any additional manifest files. Sackmesser commands are provided as samples in this repo.<BR>Source: [Github Apigee Devrel](https://github.com/apigee/devrel/tree/main/tools/apigee-sackmesser) 
 
-1. If needed, deplay Application Integration Service and create an Integration Flow, having an API trigger.
+1. If needed, set up a Google Cloud Application Integration Service and create an Integration Flow, having an API trigger. See [Set up Application Integration](https://cloud.google.com/application-integration/docs/setup-application-integration).
 
 > The Apigee proxy provided was designed to call this Application Integration Flow, having one input string parameter : **productID**
 
@@ -45,12 +46,27 @@ The flow principle is:
     - Create a service account in Google Cloud and assign it the necessary roles to execute your Application Integration flow: depending on the resource type, **integrations.apigeeIntegrations.invoke** or **integrations.integrations.invoke** (see [Applicaton Integration execute: IAM permissions](https://cloud.google.com/application-integration/docs/reference/rest/v1/projects.locations.integrations/execute#iam-permissions) and [Understanding GCP roles](https://cloud.google.com/iam/docs/understanding-roles)).
     - Create a key and download the json key file for the service account
 
-
 3. Create a KVM in the target Apigee Environment. <BR>Add an **encrypted** KVM entry in it. Paste the JSON content of the Service Account JSON key file, downloaded in step 2.
+
+    Example: straight deployment to Apigee Edge using [Sackmesser](https://github.com/apigee/devrel/tree/main/tools/apigee-sackmesser), from local repository. 
+    - convert SA json key file data to string<BR>For example, you can use the following commmand:
+        ```bash
+        cat <YOUR-SA-JSON-KEY-FILE> | jq -c | jq -R
+        ```
+    and copy the result to your clipboard.
+    - update `./resources/edge/<YOUR-ENV-NAME>/kvms.json` with
+        - **name**= your new KVM name
+        - **entry.name**= your new KVM entry name
+        - **entry.value**= SA json key file content converted to string
+    - rename folder `./resources/edge/<YOUR-ENV-NAME>` to your Apigee target environment name
+    
+    The KVM will be created and populated when you wil use the Sackmesser deploy command in step 6.
+    
+
 
 4. Install Apigee GCP SA Shareflow<BR>This sharedflow is used to obtain access tokens for Google Cloud service accounts. Access tokens are cached in a dedicated environment cache resource for 10min, and used to call GCP services.<BR>Source: [Github Apigee Devrel SA Auth Sharedflow](https://github.com/apigee/devrel/tree/main/references/gcp-sa-auth-shared-flow).
 
-    Exemple: straight deployment to Apigee Edge using [Sackmesser](https://github.com/apigee/devrel/tree/main/tools/apigee-sackmesser), directly from Git repository. 
+    Example: straight deployment to Apigee Edge using [Sackmesser](https://github.com/apigee/devrel/tree/main/tools/apigee-sackmesser), directly from Git repository. 
 
 
     ```bash
@@ -63,29 +79,14 @@ The flow principle is:
     -g https://github.com/apigee/devrel/tree/main/references/gcp-sa-auth-shared-flow
     ```
 
-    > you can also use Apigee Edge UI, [Apigee Edge Deploy Maven Plugin](https://github.com/apigee/apigee-deploy-maven-plugin/tree/1.x) or [apigeetool](https://github.com/apigee/apigeetool-node),  to deploy the sharedflow.
+    > You can also use Apigee Edge UI, [Apigee Edge Deploy Maven Plugin](https://github.com/apigee/apigee-deploy-maven-plugin/tree/1.x) or [apigeetool](https://github.com/apigee/apigeetool-node), to deploy the sharedflow.
 
 
-5. Deploy this proxy to your Apigee organization
 
-    Exemple: straight deployment to Apigee Edge using [Sackmesser](https://github.com/apigee/devrel/tree/main/tools/apigee-sackmesser), directly from Git repository.
-
-    ``` bash
-    export APIGEE_EDGE_USR=<YOUR-USER-NAME>
-    export APIGEE_EDGE_PWD=<YOUR-USER-PASSWORD>
-    export APIGEE_EDGE_ORG=<YOUR-ORG-NAME>
-    export APIGEE_EDGE_ENV=<YOUR-ENV-NAME>
-
-    sackmesser deploy --apigeeapi -u $APIGEE_EDGE_USR -p $APIGEE_EDGE_PWD \
-    -o $APIGEE_EDGE_ORG -e $APIGEE_EDGE_ENV \
-    -g https://github.com/g-lalevee/apigee-edge-application-integration
-    ```
-> you can also use Apigee Edge UI, [Apigee Edge Deploy Maven Plugin](https://github.com/apigee/apigee-deploy-maven-plugin/tree/1.x) or [apigeetool](https://github.com/apigee/apigeetool-node),  to deploy the proxy.
-
-
-## Configuration]
-1. Configure this proxy<BR>
-   Update AM-setIntegrationVariables policy.<BR>Set **ProjectId**, **IntegrationName**, **ApiTrigger**, **Region** and **parameters_keys_values_string** values with your GCP Project and Application Integration values:
+5. Configure the Apigee proxy<BR>
+   
+   1. Update AM-setIntegrationVariables policy file: `./apiproxy/policies/AM-setIntegrationVariables.xml`.
+   <BR>Set **ProjectId**, **IntegrationName**, **ApiTrigger**, **Region** and **parameters_keys_values_string** values with your GCP Project and Application Integration values:
 
     ```xml
         <AssignVariable>
@@ -110,7 +111,42 @@ The flow principle is:
         </AssignVariable>
     ```
 
-2. Save and deploy proxy
+    2. Update KV.Lookup-SA-Key policy file: `./apiproxy/policies/KV.Lookup-SA-Key.xml`.
+   <BR>Set **mapIdentifier**, *key.parameter** values with your KVM Name and KVM Entry Name values:
+
+    ```xml
+        <KeyValueMapOperations name="KV.Lookup-SA-Key" mapIdentifier="xxxxx">
+            <ExpiryTimeInSecs>300</ExpiryTimeInSecs>
+            <Get assignTo="private.gcp.service_account.key">
+                <Key>
+                    <Parameter>xxxxx</Parameter>
+                </Key>
+            </Get>
+        </KeyValueMapOperations>
+    ```
+
+    3. If needed you can also change the base path of the proxy in the `./apiproxy/proxies/default.xml` file: **BasePath** parameter.
+    <BR>By default, base path is set to `/v1/appint`.
+
+
+
+6. Deploy Apigee proxy to your Apigee organization
+
+    Example: straight deployment to Apigee Edge using [Sackmesser](https://github.com/apigee/devrel/tree/main/tools/apigee-sackmesser), from local repository.
+
+    ``` bash
+    export APIGEE_EDGE_USR=<YOUR-USER-NAME>
+    export APIGEE_EDGE_PWD=<YOUR-USER-PASSWORD>
+    export APIGEE_EDGE_ORG=<YOUR-ORG-NAME>
+    export APIGEE_EDGE_ENV=<YOUR-ENV-NAME>
+
+    sackmesser deploy --apigeeapi -u $APIGEE_EDGE_USR -p $APIGEE_EDGE_PWD \
+    -o $APIGEE_EDGE_ORG -e $APIGEE_EDGE_ENV \
+    -d .
+    ```
+    > You can also use Apigee Edge UI, [Apigee Edge Deploy Maven Plugin](https://github.com/apigee/apigee-deploy-maven-plugin/tree/1.x) or [apigeetool](https://github.com/apigee/apigeetool-node), to deploy the proxy.
+
+
 
 ## Test
 
